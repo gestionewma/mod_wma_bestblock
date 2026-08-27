@@ -1,0 +1,508 @@
+/* ═══════════════════════════════════════════════════════════
+   WMA BESTBLOCK · Stylesheet — mod_wma_bestblock
+   Tutte le regole sono scoped in .wma-bestblock-wrapper
+   ═══════════════════════════════════════════════════════════ */
+
+/* Custom properties — inizializzate inline dal PHP, aggiornate dal JS */
+.wma-bestblock-wrapper {
+    --bg-main:    #2a2218;
+    --block-bg:   rgba(107, 83, 68, 0.85);
+    --text-color: #ffffff;
+    --text-shadow: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s ease;
+}
+
+/* ───────────────────────────────────────────────────────────
+   BAGLIORE MOUSE
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .wma-bestblock-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    margin: -300px 0 0 -300px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+        farthest-corner circle in srgb,
+        oklch(100% 0.00 360 / 70%) 0%,
+        oklch(100% 0 360 / 0%) 44% 0%
+    );
+    z-index: 0;
+    transition: transform 0.05s ease-out;
+}
+
+/* ───────────────────────────────────────────────────────────
+   LAYOUT PRINCIPALE
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .bento-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+/* Grid 4 colonne × 4 righe con proporzioni identiche all'originale */
+.wma-bestblock-wrapper .bento-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1.4fr 0.6fr;
+    gap: clamp(12px, 1.4vw, 20px);
+}
+
+/* ───────────────────────────────────────────────────────────
+   POSIZIONAMENTO CELLE
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .cell-b1 { grid-column: 1 / 3; grid-row: 1 / 3; }
+.wma-bestblock-wrapper .cell-b2 { grid-column: 3;     grid-row: 1;     }
+.wma-bestblock-wrapper .cell-b3 { grid-column: 4;     grid-row: 1 / 3; }
+.wma-bestblock-wrapper .cell-b4 { grid-column: 1;     grid-row: 3;     }
+.wma-bestblock-wrapper .cell-b5 { grid-column: 2;     grid-row: 3;     }
+.wma-bestblock-wrapper .cell-b6 { grid-column: 3;     grid-row: 2 / 4; }
+.wma-bestblock-wrapper .cell-b7 { grid-column: 3;     grid-row: 4;     }
+.wma-bestblock-wrapper .cell-b8 { grid-column: 4;     grid-row: 3 / 5; }
+.wma-bestblock-wrapper .cell-b9 { grid-column: 1;     grid-row: 4;     }
+
+.wma-bestblock-wrapper .cell-nav-pair {
+    grid-column: 2;
+    grid-row: 4;
+    display: flex;
+    gap: clamp(8px, 1vw, 14px);
+}
+
+.wma-bestblock-wrapper .cell-b10,
+.wma-bestblock-wrapper .cell-b11 {
+    flex: 1;
+}
+
+/* ───────────────────────────────────────────────────────────
+   CELLE BASE
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .cell {
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+}
+
+.wma-bestblock-wrapper .cell-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Nasconde img con src vuoto */
+.wma-bestblock-wrapper .cell-cover[src=""] {
+    display: none;
+}
+
+.wma-bestblock-wrapper .block-num {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    pointer-events: none;
+    max-width: calc(100% - 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ───────────────────────────────────────────────────────────
+   CELLE IMMAGINE (B1, B3, B5, B6, B8) — background di fallback
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .cell-b1,
+.wma-bestblock-wrapper .cell-b3,
+.wma-bestblock-wrapper .cell-b5,
+.wma-bestblock-wrapper .cell-b6,
+.wma-bestblock-wrapper .cell-b8 {
+    background-color: var(--block-bg);
+    transition: background-color 0.4s ease;
+}
+
+/* ───────────────────────────────────────────────────────────
+   CELLE TESTO (B2, B4, B7)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .cell-b2,
+.wma-bestblock-wrapper .cell-b7 {
+    background-color: var(--block-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(12px, 1.8vw, 22px);
+    transition: background-color 0.4s ease;
+}
+
+.wma-bestblock-wrapper .cell-b4 {
+    background-color: var(--block-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(14px, 2vw, 26px);
+    transition: background-color 0.4s ease;
+}
+
+/* ───────────────────────────────────────────────────────────
+   PULSANTI (B9, B10, B11)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .cell-b9,
+.wma-bestblock-wrapper .cell-b10,
+.wma-bestblock-wrapper .cell-b11 {
+    background-color: var(--block-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+}
+
+.wma-bestblock-wrapper .cell-b9:hover,
+.wma-bestblock-wrapper .cell-b10:hover,
+.wma-bestblock-wrapper .cell-b11:hover {
+    filter: brightness(1.15);
+}
+
+.wma-bestblock-wrapper .btn-label {
+    background: none;
+    border: none;
+    color: var(--text-color, #fff);
+    font-family: inherit;
+    font-size: clamp(9px, 0.85vw, 12px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* ───────────────────────────────────────────────────────────
+   OVERLAY HERO (B1)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .hero-overlay {
+    position: absolute;
+    bottom: clamp(14px, 2vw, 24px);
+    left: clamp(14px, 2vw, 24px);
+    color: var(--text-color, #fff);
+    text-shadow: var(--text-shadow, none);
+    z-index: 2;
+}
+
+.wma-bestblock-wrapper .hero-overlay .tag {
+    font-size: clamp(9px, 0.75vw, 11px);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    opacity: 0.75;
+    margin-bottom: 4px;
+}
+
+.wma-bestblock-wrapper .hero-overlay .bb-title {
+    font-size: clamp(20px, 3vw, 46px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.wma-bestblock-wrapper .hero-overlay .bb-paragraph {
+    font-size: clamp(10px, 1vw, 15px);
+    opacity: 0.65;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.wma-bestblock-wrapper .hero-counter {
+    position: absolute;
+    top: clamp(12px, 1.5vw, 20px);
+    right: clamp(14px, 2vw, 24px);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: clamp(10px, 0.8vw, 13px);
+    letter-spacing: 1px;
+    z-index: 2;
+}
+
+/* ───────────────────────────────────────────────────────────
+   OVERLAY FOOD (B8)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .food-overlay,
+.wma-bestblock-wrapper .b3-overlay,
+.wma-bestblock-wrapper .b5-overlay,
+.wma-bestblock-wrapper .b6-overlay {
+    position: absolute;
+    bottom: clamp(12px, 1.8vw, 20px);
+    left: clamp(12px, 1.8vw, 20px);
+    color: var(--text-color, #fff);
+    text-shadow: var(--text-shadow, none);
+    z-index: 2;
+}
+
+.wma-bestblock-wrapper .food-overlay .tag,
+.wma-bestblock-wrapper .b3-overlay .tag,
+.wma-bestblock-wrapper .b5-overlay .tag,
+.wma-bestblock-wrapper .b6-overlay .tag {
+    font-size: clamp(8px, 0.65vw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 3px;
+}
+
+.wma-bestblock-wrapper .food-overlay .bb-title,
+.wma-bestblock-wrapper .b3-overlay .bb-title,
+.wma-bestblock-wrapper .b5-overlay .bb-title,
+.wma-bestblock-wrapper .b6-overlay .bb-title {
+    font-size: clamp(14px, 1.8vw, 24px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.wma-bestblock-wrapper .b3-overlay .bb-paragraph,
+.wma-bestblock-wrapper .b5-overlay .bb-paragraph,
+.wma-bestblock-wrapper .b6-overlay .bb-paragraph {
+    font-size: clamp(9px, 0.75vw, 12px);
+    opacity: 0.65;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+/* ───────────────────────────────────────────────────────────
+   CARD LABEL (B2, B7)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .card-label {
+    color: var(--text-color, #fff);
+    text-shadow: var(--text-shadow, none);
+}
+
+.wma-bestblock-wrapper .card-label .tag {
+    font-size: clamp(8px, 0.65vw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.65;
+    margin-bottom: 4px;
+}
+
+.wma-bestblock-wrapper .card-label .bb-title {
+    font-size: clamp(16px, 2.2vw, 32px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0;
+}
+
+.wma-bestblock-wrapper .card-label .bb-paragraph {
+    font-size: clamp(9px, 0.8vw, 12px);
+    opacity: 0.65;
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 1.45;
+}
+
+/* ───────────────────────────────────────────────────────────
+   BLOCK LABEL (B4)
+   ─────────────────────────────────────────────────────────── */
+.wma-bestblock-wrapper .block-label {
+    color: var(--text-color, #fff);
+    text-shadow: var(--text-shadow, none);
+}
+
+.wma-bestblock-wrapper .block-label .tag {
+    font-size: clamp(8px, 0.65vw, 10px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+}
+
+.wma-bestblock-wrapper .block-label .bb-title {
+    font-size: clamp(13px, 1.4vw, 19px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.wma-bestblock-wrapper .block-label .bb-paragraph {
+    font-size: clamp(9px, 0.78vw, 12px);
+    opacity: 0.5;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* Link dentro i blocchi — senza decorazioni visive di disturbo */
+.wma-bestblock-wrapper .bb-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.wma-bestblock-wrapper .bb-link:hover {
+    opacity: 0.85;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMAZIONI — identiche all'originale
+   ═══════════════════════════════════════════════════════════ */
+@keyframes bb-scaleIn {
+    from { opacity: 0; transform: scale(1.06); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bb-slideInRight {
+    from { opacity: 0; transform: translateX(-100%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bb-slideInDown {
+    from { opacity: 0; transform: translateY(-100%); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bb-slideInLeft {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bb-slideInUp {
+    from { opacity: 0; transform: translateY(100%); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bb-fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bb-fadeLeft {
+    from { opacity: 0; transform: translateX(-22px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bb-fadeRight {
+    from { opacity: 0; transform: translateX(22px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.wma-bestblock-wrapper .anim-scale {
+    animation: bb-scaleIn 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.wma-bestblock-wrapper .anim-slide-right {
+    animation: bb-slideInRight 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) both;
+}
+.wma-bestblock-wrapper .anim-slide-down {
+    animation: bb-slideInDown 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) both;
+}
+.wma-bestblock-wrapper .anim-slide-left {
+    animation: bb-slideInLeft 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) both;
+}
+.wma-bestblock-wrapper .anim-slide-up {
+    animation: bb-slideInUp 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) both;
+}
+.wma-bestblock-wrapper .anim-up1 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s both;
+}
+.wma-bestblock-wrapper .anim-up2 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.18s both;
+}
+.wma-bestblock-wrapper .anim-up3 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.28s both;
+}
+.wma-bestblock-wrapper .anim-up4 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.38s both;
+}
+.wma-bestblock-wrapper .anim-up5 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.46s both;
+}
+.wma-bestblock-wrapper .anim-up6 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.54s both;
+}
+.wma-bestblock-wrapper .anim-up7 {
+    animation: bb-fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.60s both;
+}
+.wma-bestblock-wrapper .anim-left {
+    animation: bb-fadeLeft 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.12s both;
+}
+.wma-bestblock-wrapper .anim-right {
+    animation: bb-fadeRight 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.22s both;
+}
+.wma-bestblock-wrapper .anim-text-slide-right {
+    animation: bb-slideInRight 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.65s both;
+}
+.wma-bestblock-wrapper .anim-text-slide-down {
+    animation: bb-slideInDown 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.65s both;
+}
+.wma-bestblock-wrapper .anim-text-slide-left {
+    animation: bb-fadeLeft 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.65s both;
+}
+.wma-bestblock-wrapper .anim-text-slide-up {
+    animation: bb-fadeUp 0.85s cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.65s both;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE ≤ 768px
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .wma-bestblock-wrapper {
+        height: auto !important;
+        min-height: 60vw;
+        overflow: visible;
+    }
+
+    .wma-bestblock-wrapper .bento-wrapper {
+        height: auto;
+        padding: 8px;
+    }
+
+    .wma-bestblock-wrapper .bento-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 52vw;
+        grid-auto-rows: 42vw;
+        gap: 8px;
+        height: auto;
+    }
+
+    .wma-bestblock-wrapper .cell-b1 {
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+
+    .wma-bestblock-wrapper .cell-b2,
+    .wma-bestblock-wrapper .cell-b3,
+    .wma-bestblock-wrapper .cell-b4,
+    .wma-bestblock-wrapper .cell-b5,
+    .wma-bestblock-wrapper .cell-b6,
+    .wma-bestblock-wrapper .cell-b7,
+    .wma-bestblock-wrapper .cell-b8 {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .wma-bestblock-wrapper .cell-b9 {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .wma-bestblock-wrapper .cell-nav-pair {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .wma-bestblock-wrapper .btn-label {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+}

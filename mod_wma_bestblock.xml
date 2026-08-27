@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="6.0" client="site" method="upgrade">
+    <name>MOD_WMA_BESTBLOCK</name>
+    <author>Team Developer by WMA Web Maker Agency</author>
+    <creationDate>27/08/2026</creationDate>
+    <copyright>(C) 2026 WMA Web Maker Agency. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>wmaextension@gmail.com</authorEmail>
+    <authorUrl>https://www.wma.ovh</authorUrl>
+    <version>1.0.23</version>
+    <description>MOD_WMA_BESTBLOCK_DESCRIPTION</description>
+    <namespace path="src">Wma\Module\WmaBestblock</namespace>
+
+    <files>
+        <filename module="mod_wma_bestblock">mod_wma_bestblock.php</filename>
+        <folder>services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+        <folder>forms</folder>
+        <folder>layouts</folder>
+    </files>
+
+    <languages folder="language">
+        <language tag="it-IT">it-IT/mod_wma_bestblock.ini</language>
+        <language tag="it-IT">it-IT/mod_wma_bestblock.sys.ini</language>
+        <language tag="en-GB">en-GB/mod_wma_bestblock.ini</language>
+        <language tag="en-GB">en-GB/mod_wma_bestblock.sys.ini</language>
+    </languages>
+
+    <media destination="mod_wma_bestblock" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <folder>images</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+
+    <config>
+        <fields name="params">
+
+            <!-- ── Tab Sets ───────────────────────────────────────────── -->
+            <fieldset name="sets" label="MOD_WMA_BESTBLOCK_FIELDSET_SETS">
+                <field name="sets" type="subform"
+                    label="MOD_WMA_BESTBLOCK_SETS"
+                    description="MOD_WMA_BESTBLOCK_SETS_DESC"
+                    multiple="true"
+                    min="1"
+                    max="20"
+                    layout="subform.wma_bestblock"
+                    layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                    formsource="modules/mod_wma_bestblock/forms/set.xml"
+                    buttons="add,remove,move" />
+            </fieldset>
+
+            <!-- ── Tab Informazioni ──────────────────────────────────── -->
+            <fieldset name="info"
+                      label="MOD_WMA_BESTBLOCK_FIELDSET_INFO"
+                      addfieldprefix="Wma\Module\WmaBestblock\Site\Field">
+                <field name="credits" type="WmaInfo"
+                    label="MOD_WMA_BESTBLOCK_FIELDSET_INFO"
+                    hiddenLabel="true" />
+            </fieldset>
+
+            <!-- ── Tab Opzioni ────────────────────────────────────────── -->
+            <fieldset name="options" label="MOD_WMA_BESTBLOCK_FIELDSET_OPTIONS">
+                <field name="height_value" type="number"
+                    label="MOD_WMA_BESTBLOCK_HEIGHT_VALUE"
+                    description="MOD_WMA_BESTBLOCK_HEIGHT_VALUE_DESC"
+                    default="100"
+                    min="1"
+                    max="9999"
+                    step="1" />
+                <field name="height_unit" type="list"
+                    label="MOD_WMA_BESTBLOCK_HEIGHT_UNIT"
+                    description="MOD_WMA_BESTBLOCK_HEIGHT_UNIT_DESC"
+                    default="vh">
+                    <option value="vh">vh</option>
+                    <option value="%">%</option>
+                    <option value="px">px</option>
+                </field>
+                <field name="autoplay" type="radio"
+                    label="MOD_WMA_BESTBLOCK_AUTOPLAY"
+                    description="MOD_WMA_BESTBLOCK_AUTOPLAY_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="0">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="delay" type="number"
+                    label="MOD_WMA_BESTBLOCK_DELAY"
+                    description="MOD_WMA_BESTBLOCK_DELAY_DESC"
+                    default="6000"
+                    min="1000"
+                    max="30000"
+                    step="500"
+                    showon="autoplay:1" />
+                <field name="show_mouse_glow" type="radio"
+                    label="MOD_WMA_BESTBLOCK_SHOW_MOUSE_GLOW"
+                    description="MOD_WMA_BESTBLOCK_SHOW_MOUSE_GLOW_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="show_block_numbers" type="radio"
+                    label="MOD_WMA_BESTBLOCK_SHOW_BLOCK_NUMBERS"
+                    description="MOD_WMA_BESTBLOCK_SHOW_BLOCK_NUMBERS_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="0">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+            </fieldset>
+
+        </fields>
+    </config>
+
+    <updateservers>
+        <server type="extension" priority="1" name="mod_wma_bestblock Update Site">https://raw.githubusercontent.com/gestionewma/mod_wma_bestblock/main/mod_wma_bestblock_update.xml</server>
+    </updateservers>
+</extension>
