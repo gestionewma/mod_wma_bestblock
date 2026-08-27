@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    forms/set.xml — Campi di un singolo Set (subform di mod_wma_bestblock)
+    Ogni set corrisponde a uno "slide" del bento-grid: 11 blocchi totali.
+
+    I dati vengono acceduti come $group->set->fieldname nel Helper
+    grazie a <fields name="set">.
+-->
+<form>
+    <fields name="set" addfieldprefix="Joomla\Component\Content\Administrator\Field\Modal">
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             COLORI SET
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="colors" label="MOD_WMA_BESTBLOCK_FIELDSET_COLORS">
+            <field name="color_bg" type="color"
+                label="MOD_WMA_BESTBLOCK_COLOR_BG"
+                description="MOD_WMA_BESTBLOCK_COLOR_BG_DESC"
+                default="#2a2218" />
+            <field name="color_secondary" type="color"
+                label="MOD_WMA_BESTBLOCK_COLOR_SECONDARY"
+                description="MOD_WMA_BESTBLOCK_COLOR_SECONDARY_DESC"
+                default="#6b5344" />
+            <field name="color_text" type="color"
+                label="MOD_WMA_BESTBLOCK_COLOR_TEXT"
+                description="MOD_WMA_BESTBLOCK_COLOR_TEXT_DESC"
+                default="#ffffff" />
+            <field name="text_shadow" type="list"
+                label="MOD_WMA_BESTBLOCK_TEXT_SHADOW"
+                description="MOD_WMA_BESTBLOCK_TEXT_SHADOW_DESC"
+                default="none">
+                <option value="none">MOD_WMA_BESTBLOCK_TEXT_SHADOW_NONE</option>
+                <option value="light">MOD_WMA_BESTBLOCK_TEXT_SHADOW_LIGHT</option>
+                <option value="strong">MOD_WMA_BESTBLOCK_TEXT_SHADOW_STRONG</option>
+            </field>
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B1 · HERO — col 1-2, righe 1-2
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b1" label="MOD_WMA_BESTBLOCK_FIELDSET_B1">
+            <field name="b1_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b1_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b1_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h2">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b1_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b1_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b1_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b1_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b1_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b1_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b1_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B2 · CARD TESTO — col 3, riga 1
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b2" label="MOD_WMA_BESTBLOCK_FIELDSET_B2">
+            <field name="b2_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b2_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b2_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b2_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b2_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b2_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b2_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b2_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b2_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b2_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B3 · IMMAGINE — col 4, righe 1-2
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b3" label="MOD_WMA_BESTBLOCK_FIELDSET_B3">
+            <field name="b3_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_B3_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b3_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b3_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h2">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b3_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b3_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b3_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b3_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b3_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b3_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b3_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B4 · TESTO — col 1, riga 3
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b4" label="MOD_WMA_BESTBLOCK_FIELDSET_B4">
+            <field name="b4_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b4_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b4_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b4_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b4_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b4_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b4_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b4_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b4_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b4_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B5 · IMMAGINE — col 2, riga 3
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b5" label="MOD_WMA_BESTBLOCK_FIELDSET_B5">
+            <field name="b5_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_B5_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b5_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b5_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b5_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b5_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b5_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b5_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b5_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b5_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b5_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B6 · IMMAGINE — col 3, righe 2-3
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b6" label="MOD_WMA_BESTBLOCK_FIELDSET_B6">
+            <field name="b6_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_B6_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b6_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b6_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b6_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b6_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b6_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b6_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b6_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b6_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b6_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B7 · CARD TESTO — col 3, riga 4
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b7" label="MOD_WMA_BESTBLOCK_FIELDSET_B7">
+            <field name="b7_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b7_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b7_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b7_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b7_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b7_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b7_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b7_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b7_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b7_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B8 · IMMAGINE + OVERLAY — col 4, righe 3-4
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b8" label="MOD_WMA_BESTBLOCK_FIELDSET_B8">
+            <field name="b8_image" type="accessiblemedia"
+                label="MOD_WMA_BESTBLOCK_IMAGE"
+                description="MOD_WMA_BESTBLOCK_IMAGE_B8_DESC"
+                layoutIncludePath="modules/mod_wma_bestblock/layouts"
+                directory="images/bestblock" />
+            <field name="b8_title" type="text"
+                label="MOD_WMA_BESTBLOCK_TITLE"
+                description="MOD_WMA_BESTBLOCK_TITLE_DESC" />
+            <field name="b8_title_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_TITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="h3">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b8_title_size" type="number"
+                label="MOD_WMA_BESTBLOCK_TITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_TITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.2" />
+            <field name="b8_subtitle" type="text"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_DESC" />
+            <field name="b8_subtitle_tag" type="list"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_TAG"
+                description="MOD_WMA_BESTBLOCK_TAG_DESC"
+                default="p">
+                <option value="h1">H1</option>
+                <option value="h2">H2 LINK</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="p">P</option>
+                <option value="div">DIV</option>
+            </field>
+            <field name="b8_subtitle_size" type="number"
+                label="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE"
+                description="MOD_WMA_BESTBLOCK_SUBTITLE_SIZE_DESC"
+                min="0.5"
+                max="5"
+                step="0.1"
+                placeholder="1.0" />
+            <field name="b8_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b8_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b8_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC"
+                />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B9 · PULSANTE AZIONE — col 1, riga 4
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b9" label="MOD_WMA_BESTBLOCK_FIELDSET_B9">
+            <field name="b9_label" type="text"
+                label="MOD_WMA_BESTBLOCK_BTN_LABEL"
+                description="MOD_WMA_BESTBLOCK_BTN_LABEL_DESC"
+                default="Scopri di più" />
+            <field name="b9_link_article" type="Article"
+                label="MOD_WMA_BESTBLOCK_LINK_ARTICLE"
+                description="MOD_WMA_BESTBLOCK_LINK_ARTICLE_DESC" />
+            <field name="b9_link_url" type="url"
+                label="MOD_WMA_BESTBLOCK_LINK_URL"
+                description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
+                hint="https://..." />
+            <field name="b9_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B10 · PREV — col 2a, riga 4
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b10" label="MOD_WMA_BESTBLOCK_FIELDSET_B10">
+            <field name="b10_label" type="text"
+                label="MOD_WMA_BESTBLOCK_BTN_LABEL"
+                description="MOD_WMA_BESTBLOCK_BTN_PREV_DESC"
+                default="← Precedente" />
+            <field name="b10_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
+        </fieldset>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             B11 · NEXT — col 2b, riga 4
+             ══════════════════════════════════════════════════════════════ -->
+        <fieldset name="b11" label="MOD_WMA_BESTBLOCK_FIELDSET_B11">
+            <field name="b11_label" type="text"
+                label="MOD_WMA_BESTBLOCK_BTN_LABEL"
+                description="MOD_WMA_BESTBLOCK_BTN_NEXT_DESC"
+                default="Successivo →" />
+            <field name="b11_paragraph" type="text"
+                label="MOD_WMA_BESTBLOCK_BADGE"
+                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
+        </fieldset>
+
+    </fields>
+</form>
