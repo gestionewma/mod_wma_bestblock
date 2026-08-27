@@ -15,7 +15,7 @@
         </downloads>
 
 
-        <checksum type="sha256">CDBB138E3F2B251CED496F24F109460C11D579794510CC54C8406E6D5DC5B881</checksum>
+        <checksum type="sha256">3942c3fbdcfefaf6bad66cef0ae0c57e0ed6857348db3ebbd90cf02be1ba1f3c</checksum>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>
