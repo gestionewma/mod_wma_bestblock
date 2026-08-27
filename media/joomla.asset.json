@@ -1,7 +1,7 @@
 {
     "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
     "name": "mod_wma_bestblock",
-    "version": "1.0.23",
+    "version": "1.0.25",
     "description": "WMA BestBlock module assets",
     "license": "GPL-2.0-or-later",
     "assets": [
@@ -9,13 +9,13 @@
             "name": "mod_wma_bestblock.style",
             "type": "style",
             "uri": "mod_wma_bestblock/bestblock.css",
-            "version": "1.0.23"
+            "version": "1.0.25"
         },
         {
             "name": "mod_wma_bestblock.script",
             "type": "script",
             "uri": "mod_wma_bestblock/bestblock.js",
-            "version": "1.0.23",
+            "version": "1.0.25",
             "attributes": {
                 "type": "module"
             },

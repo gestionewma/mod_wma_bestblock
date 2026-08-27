@@ -3,7 +3,7 @@
  * Gestisce la navigazione tra i Set del bento-grid.
  * Supporta istanze multiple sulla stessa pagina.
  *
- * @version 1.0.23
+ * @version 1.0.25
  */
 
 const ANIM_CLASSES = [
