@@ -3,7 +3,7 @@
  * Gestisce la navigazione tra i Set del bento-grid e il Lightbox immagini.
  * Supporta istanze multiple sulla stessa pagina.
  *
- * @version 1.0.26
+ * @version 1.0.29
  */
 
 const ANIM_CLASSES = [
@@ -131,7 +131,8 @@ function getOrCreateLightbox() {
         renderCurrentImage();
         overlay.classList.add('active');
         overlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        // Blocco scroll su <html> (piu' affidabile su mobile di body.style.overflow)
+        document.documentElement.classList.add('wma-bb-lb-open');
     }
 
     function close() {
@@ -139,7 +140,7 @@ function getOrCreateLightbox() {
         isOpen = false;
         overlay.classList.remove('active');
         overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        document.documentElement.classList.remove('wma-bb-lb-open');
         setTimeout(() => {
             imgEl.src = '';
         }, 300);
