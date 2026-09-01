@@ -459,7 +459,7 @@
     .wma-bestblock-wrapper {
         height: auto !important;
         min-height: 60vw;
-        overflow: visible;
+        overflow: hidden;
     }
 
     .wma-bestblock-wrapper .bento-wrapper {
