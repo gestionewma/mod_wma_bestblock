@@ -59,7 +59,7 @@ The module uses a remote update server through `mod_wma_bestblock_update.xml` in
 
 ## Version
 
-Current version: `1.0.30`
+Current version: `1.0.31`
 
 ---
 
@@ -126,4 +126,4 @@ Il modulo usa un update server remoto tramite `mod_wma_bestblock_update.xml` nel
 
 ## Versione
 
-Versione corrente: `1.0.30`
+Versione corrente: `1.0.31`
