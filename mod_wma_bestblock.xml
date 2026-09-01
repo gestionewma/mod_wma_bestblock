@@ -2,12 +2,12 @@
 <extension type="module" version="6.0" client="site" method="upgrade">
     <name>MOD_WMA_BESTBLOCK</name>
     <author>Team Developer by WMA Web Maker Agency</author>
-    <creationDate>27/08/2026</creationDate>
+    <creationDate>01/09/2026</creationDate>
     <copyright>(C) 2026 WMA Web Maker Agency. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>wmaextension@gmail.com</authorEmail>
     <authorUrl>https://www.wma.ovh</authorUrl>
-    <version>1.0.25</version>
+    <version>1.0.26</version>
     <description>MOD_WMA_BESTBLOCK_DESCRIPTION</description>
     <namespace path="src">Wma\Module\WmaBestblock</namespace>
 
@@ -45,6 +45,7 @@
                     multiple="true"
                     min="1"
                     max="20"
+                    validate="Subform"
                     layout="subform.wma_bestblock"
                     layoutIncludePath="modules/mod_wma_bestblock/layouts"
                     formsource="modules/mod_wma_bestblock/forms/set.xml"
@@ -109,6 +110,27 @@
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
                 </field>
+                <field name="lightbox_enable" type="radio"
+                    label="MOD_WMA_BESTBLOCK_LIGHTBOX_ENABLE"
+                    description="MOD_WMA_BESTBLOCK_LIGHTBOX_ENABLE_DESC"
+                    class="btn-group btn-group-yesno"
+                    default="1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="lightbox_bg_color" type="color"
+                    label="MOD_WMA_BESTBLOCK_LIGHTBOX_BG_COLOR"
+                    description="MOD_WMA_BESTBLOCK_LIGHTBOX_BG_COLOR_DESC"
+                    default="#000000"
+                    showon="lightbox_enable:1" />
+                <field name="lightbox_bg_opacity" type="number"
+                    label="MOD_WMA_BESTBLOCK_LIGHTBOX_BG_OPACITY"
+                    description="MOD_WMA_BESTBLOCK_LIGHTBOX_BG_OPACITY_DESC"
+                    default="85"
+                    min="10"
+                    max="100"
+                    step="5"
+                    showon="lightbox_enable:1" />
             </fieldset>
 
         </fields>

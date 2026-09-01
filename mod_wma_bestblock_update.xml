@@ -8,14 +8,14 @@
         <client>site</client>
 
 
-        <version>1.0.25</version>
+        <version>1.0.26</version>
         <downloads>
             <downloadurl type="full" format="zip">
-                https://github.com/gestionewma/mod_wma_bestblock/releases/download/v1.0.25/mod_wma_bestblock-v1.0.25.zip</downloadurl>
+                https://github.com/gestionewma/mod_wma_bestblock/releases/download/v1.0.26/mod_wma_bestblock-v1.0.26.zip</downloadurl>
         </downloads>
 
 
-        <checksum type="sha256">0ca91fa440c24de3dae0ccd00c351b7e2d0c5b0d587bcdfd37fd474717712fd0</checksum>
+        <!-- TODO v1.0.26: ricalcolare lo SHA256 sullo ZIP generato da GitHub Actions e reinserire <checksum type="sha256">...</checksum> -->
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>

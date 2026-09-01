@@ -8,8 +8,8 @@
  * @copyright   (C) 2026 WMA Web Maker Agency. All rights reserved.
  * @license     GNU General Public License version 2 or later;
  * @link        https://www.wma.ovh
- * @version     1.0.25
- * @date        27/08/2026
+ * @version     1.0.26
+ * @date        01/09/2026
  * @file        src/Dispatcher/Dispatcher.php
  */
 
@@ -34,12 +34,15 @@ class Dispatcher extends AbstractModuleDispatcher
         $helper = new WmaBestblockHelper();
         $data['sets'] = $helper->getSets($data['params']);
 
-        $data['heightValue']     = (int) $data['params']->get('height_value', 100);
-        $data['heightUnit']      = $data['params']->get('height_unit', 'vh');
-        $data['autoplay']        = (bool) $data['params']->get('autoplay', false);
-        $data['delay']           = (int) $data['params']->get('delay', 6000);
-        $data['showMouseGlow']   = (bool) $data['params']->get('show_mouse_glow', true);
-        $data['showBlockNumbers'] = (bool) $data['params']->get('show_block_numbers', false);
+        $data['heightValue']       = (int) $data['params']->get('height_value', 100);
+        $data['heightUnit']        = $data['params']->get('height_unit', 'vh');
+        $data['autoplay']          = (bool) $data['params']->get('autoplay', false);
+        $data['delay']             = (int) $data['params']->get('delay', 6000);
+        $data['showMouseGlow']     = (bool) $data['params']->get('show_mouse_glow', true);
+        $data['showBlockNumbers']  = (bool) $data['params']->get('show_block_numbers', false);
+        $data['lightboxEnable']    = (bool) $data['params']->get('lightbox_enable', true);
+        $data['lightboxBgColor']   = (string) $data['params']->get('lightbox_bg_color', '#000000');
+        $data['lightboxBgOpacity'] = (int) $data['params']->get('lightbox_bg_opacity', 85);
 
         return $data;
     }

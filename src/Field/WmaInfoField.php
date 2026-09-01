@@ -8,8 +8,8 @@
  * @copyright   (C) 2026 WMA Web Maker Agency. All rights reserved.
  * @license     GNU General Public License version 2 or later;
  * @link        https://www.wma.ovh
- * @version     1.0.25
- * @date        27/08/2026
+ * @version     1.0.26
+ * @date        01/09/2026
  * @file        src/Field/WmaInfoField.php
  */
 
@@ -28,8 +28,8 @@ class WmaInfoField extends FormField
 
     public function getInput(): string
     {
-        $version      = '1.0.25';
-        $creationDate = '27/08/2026';
+        $version      = '1.0.26';
+        $creationDate = '01/09/2026';
         $author       = 'Team Developer by WMA Web Maker Agency';
         $email        = 'wmaextension@gmail.com';
         $authorUrl    = 'https://www.wma.ovh';
@@ -58,6 +58,18 @@ class WmaInfoField extends FormField
 
         $year = date('Y');
 
+        $rawAuthorUrl = (string) $authorUrl;
+        $isValidUrl   = false;
+        if ($rawAuthorUrl !== '' && filter_var($rawAuthorUrl, FILTER_VALIDATE_URL)) {
+            $scheme = strtolower((string) parse_url($rawAuthorUrl, PHP_URL_SCHEME));
+            if (in_array($scheme, ['http', 'https'], true)) {
+                $isValidUrl = true;
+            }
+        }
+
+        $rawEmail     = (string) $email;
+        $isValidEmail = $rawEmail !== '' && filter_var($rawEmail, FILTER_VALIDATE_EMAIL);
+
         $version      = htmlspecialchars($version,      ENT_QUOTES, 'UTF-8');
         $creationDate = htmlspecialchars($creationDate, ENT_QUOTES, 'UTF-8');
         $author       = htmlspecialchars($author,       ENT_QUOTES, 'UTF-8');
@@ -71,17 +83,17 @@ class WmaInfoField extends FormField
             ? '<img src="' . $logoUrl . '" alt="WMA Web Maker Agency" style="max-width:200px;height:auto;" onerror="this.style.display=\'none\';">'
             : '<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:#046aca;color:#fff;font-size:1.4rem;font-weight:800;border-radius:8px;letter-spacing:.05em;">WMA</div>';
 
-        $emailRow = $email ? <<<HTML
+        $emailRow = $isValidEmail ? <<<HTML
                     <tr>
                         <th style="width:35%;padding:10px 16px;background:#fff;border-bottom:1px solid #dee2e6;border-right:1px solid #dee2e6;font-weight:600;color:#495057;text-align:left;">Email</th>
                         <td style="padding:10px 16px;background:#fff;border-bottom:1px solid #dee2e6;color:#212529;"><a href="mailto:{$email}" style="color:#046aca;">{$email}</a></td>
                     </tr>
 HTML : '';
 
-        $urlRow = $authorUrl ? <<<HTML
+        $urlRow = $isValidUrl ? <<<HTML
                     <tr>
                         <th style="width:35%;padding:10px 16px;background:#fff;border-bottom:1px solid #dee2e6;border-right:1px solid #dee2e6;font-weight:600;color:#495057;text-align:left;">Sito web</th>
-                        <td style="padding:10px 16px;background:#fff;border-bottom:1px solid #dee2e6;color:#212529;"><a href="{$authorUrl}" target="_blank" rel="noopener" style="color:#046aca;">{$authorUrl}</a></td>
+                        <td style="padding:10px 16px;background:#fff;border-bottom:1px solid #dee2e6;color:#212529;"><a href="{$authorUrl}" target="_blank" rel="noopener noreferrer" style="color:#046aca;">{$authorUrl}</a></td>
                     </tr>
 HTML : '';
 

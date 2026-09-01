@@ -8,8 +8,8 @@
  * @copyright   (C) 2026 WMA Web Maker Agency. All rights reserved.
  * @license     GNU General Public License version 2 or later;
  * @link        https://www.wma.ovh
- * @version     1.0.25
- * @date        27/08/2026
+ * @version     1.0.26
+ * @date        01/09/2026
  * @file        tmpl/default.php
  */
 
@@ -26,6 +26,9 @@ use Joomla\CMS\Language\Text;
 /** @var int                       $delay */
 /** @var bool                      $showMouseGlow */
 /** @var bool                      $showBlockNumbers */
+/** @var bool                      $lightboxEnable */
+/** @var string                    $lightboxBgColor */
+/** @var int                       $lightboxBgOpacity */
 
 if (empty($sets)) {
     return;
@@ -34,6 +37,21 @@ if (empty($sets)) {
 $modId       = (int) $module->id;
 $heightStyle = (int) $heightValue . htmlspecialchars($heightUnit, ENT_QUOTES, 'UTF-8');
 $setCount    = count($sets);
+
+$lightboxEnable    = $lightboxEnable ?? true;
+$lightboxBgColor   = $lightboxBgColor ?? '#000000';
+$lightboxBgOpacity = isset($lightboxBgOpacity) ? (int) $lightboxBgOpacity : 85;
+
+// Converte colore hex + opacità in rgba per lo sfondo del lightbox
+$hex = ltrim($lightboxBgColor, '#');
+if (strlen($hex) === 3) {
+    $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+}
+$r = hexdec(substr($hex, 0, 2) ?: '00');
+$g = hexdec(substr($hex, 2, 2) ?: '00');
+$b = hexdec(substr($hex, 4, 2) ?: '00');
+$opacity = max(0, min(100, $lightboxBgOpacity)) / 100;
+$lightboxBgRgba = sprintf('rgba(%d, %d, %d, %.2f)', $r, $g, $b, $opacity);
 
 // Prima slide da pre-renderizzare nell'HTML
 $s = $sets[0];
@@ -89,7 +107,9 @@ $h2Link = static function (string $tag, string $href): string {
              data-module-id="<?php echo $modId; ?>"
              data-autoplay="<?php echo $autoplay ? '1' : '0'; ?>"
              data-delay="<?php echo (int) $delay; ?>"
-             data-set-count="<?php echo $setCount; ?>">
+             data-set-count="<?php echo $setCount; ?>"
+             data-lightbox-enabled="<?php echo $lightboxEnable ? '1' : '0'; ?>"
+             data-lightbox-bg="<?php echo htmlspecialchars($lightboxBgRgba, ENT_QUOTES, 'UTF-8'); ?>">
 
             <!-- ── B1 · HERO — col 1-2, righe 1-2 ──────────────────── -->
             <div class="cell cell-b1 anim-slide-right" data-block="b1">
@@ -224,6 +244,6 @@ $h2Link = static function (string $tag, string $href): string {
                 </div>
             </div>
 
-        </div><!-- /bento-grid -->
-    </div><!-- /bento-wrapper -->
-</div><!-- /wma-bestblock-wrapper -->
+        </div>
+    </div>
+</div>

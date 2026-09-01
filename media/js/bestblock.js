@@ -1,9 +1,9 @@
 /**
  * WMA BestBlock · Script — mod_wma_bestblock
- * Gestisce la navigazione tra i Set del bento-grid.
+ * Gestisce la navigazione tra i Set del bento-grid e il Lightbox immagini.
  * Supporta istanze multiple sulla stessa pagina.
  *
- * @version 1.0.25
+ * @version 1.0.26
  */
 
 const ANIM_CLASSES = [
@@ -48,6 +48,141 @@ function setTextEl(el, text) {
     el.textContent = text || '';
 }
 
+// ── Gestore Lightbox Singleton ───────────────────────────────────────────────
+let globalLightbox = null;
+
+function getOrCreateLightbox() {
+    if (globalLightbox) {
+        return globalLightbox;
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'wma-bb-lightbox';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-hidden', 'true');
+
+    overlay.innerHTML = `
+        <button type="button" class="wma-bb-lightbox-close" aria-label="Chiudi">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <div class="wma-bb-lightbox-container">
+            <button type="button" class="wma-bb-lightbox-btn wma-bb-lightbox-prev" aria-label="Precedente">
+                <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            <img class="wma-bb-lightbox-img" src="" alt="" />
+            <button type="button" class="wma-bb-lightbox-btn wma-bb-lightbox-next" aria-label="Successivo">
+                <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+            <div class="wma-bb-lightbox-counter"></div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const imgEl     = overlay.querySelector('.wma-bb-lightbox-img');
+    const prevBtn   = overlay.querySelector('.wma-bb-lightbox-prev');
+    const nextBtn   = overlay.querySelector('.wma-bb-lightbox-next');
+    const closeBtn  = overlay.querySelector('.wma-bb-lightbox-close');
+    const counterEl = overlay.querySelector('.wma-bb-lightbox-counter');
+
+    let imageList    = [];
+    let currentIndex = 0;
+    let isOpen       = false;
+
+    function renderCurrentImage() {
+        if (!imageList.length) return;
+        const currentItem = imageList[currentIndex];
+
+        imgEl.style.opacity = '0';
+        imgEl.style.transform = 'scale(0.96)';
+
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            imgEl.src = currentItem.src;
+            imgEl.alt = currentItem.alt || '';
+            imgEl.style.opacity = '1';
+            imgEl.style.transform = 'scale(1)';
+        };
+        tempImg.src = currentItem.src;
+
+        if (imageList.length > 1) {
+            prevBtn.style.display   = 'flex';
+            nextBtn.style.display   = 'flex';
+            counterEl.style.display = 'block';
+            counterEl.textContent   = (currentIndex + 1) + ' / ' + imageList.length;
+        } else {
+            prevBtn.style.display   = 'none';
+            nextBtn.style.display   = 'none';
+            counterEl.style.display = 'none';
+        }
+    }
+
+    function open(images, startIndex, bgRgba) {
+        if (!images || !images.length) return;
+        imageList    = images;
+        currentIndex = (startIndex >= 0 && startIndex < images.length) ? startIndex : 0;
+        isOpen       = true;
+
+        if (bgRgba) {
+            overlay.style.setProperty('--bb-lb-bg', bgRgba);
+        }
+
+        renderCurrentImage();
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+        if (!isOpen) return;
+        isOpen = false;
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            imgEl.src = '';
+        }, 300);
+    }
+
+    function prev() {
+        if (imageList.length <= 1) return;
+        currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+        renderCurrentImage();
+    }
+
+    function next() {
+        if (imageList.length <= 1) return;
+        currentIndex = (currentIndex + 1) % imageList.length;
+        renderCurrentImage();
+    }
+
+    // Event listeners del Lightbox
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay || e.target.classList.contains('wma-bb-lightbox-container')) {
+            close();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!isOpen) return;
+        if (e.key === 'Escape') {
+            close();
+        } else if (e.key === 'ArrowLeft') {
+            prev();
+        } else if (e.key === 'ArrowRight') {
+            next();
+        }
+    });
+
+    globalLightbox = { open, close };
+    return globalLightbox;
+}
+
 function initBestblock(wrapper) {
     const moduleId = wrapper.id.replace('wma-bestblock-', '');
     const dataEl   = document.getElementById('wma-bestblock-' + moduleId + '-data');
@@ -67,6 +202,8 @@ function initBestblock(wrapper) {
     const autoplay       = grid.dataset.autoplay === '1';
     const delay          = parseInt(grid.dataset.delay, 10) || 6000;
     const showMouseGlow  = wrapper.dataset.mouseGlow === '1';
+    const lightboxEnable = grid.dataset.lightboxEnabled === '1';
+    const lightboxBg     = grid.dataset.lightboxBg || 'rgba(0, 0, 0, 0.85)';
     const setCount       = sets.length;
 
     let current = 0;
@@ -138,6 +275,20 @@ function initBestblock(wrapper) {
         // Bagliore
         glow:       wrapper.querySelector('.wma-bestblock-glow'),
     };
+
+    // ── Estrae la lista di immagini valide del Set corrente ───────────────
+    function getSetImages(set) {
+        const list = [];
+        for (let i = 1; i <= 8; i++) {
+            const rawSrc = set['b' + i + '_image_src'];
+            const rawAlt = set['b' + i + '_image_alt'] || '';
+            const cleanSrc = normalizeImageSrc(rawSrc);
+            if (cleanSrc) {
+                list.push({ src: cleanSrc, alt: rawAlt, block: 'b' + i });
+            }
+        }
+        return list;
+    }
 
     // ── Applica i dati di un set ────────────────────────────────────────
     function applySet(set) {
@@ -295,6 +446,33 @@ function initBestblock(wrapper) {
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { stopAutoplay(); goTo(1);  startAutoplay(); }
         if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { stopAutoplay(); goTo(-1); startAutoplay(); }
     });
+
+    // ── Lightbox Click Handler ───────────────────────────────────────────
+    if (lightboxEnable) {
+        grid.addEventListener('click', (e) => {
+            const img = e.target.closest('.cell-cover');
+            if (!img || !img.src || img.style.display === 'none') return;
+
+            const cell = img.closest('.cell');
+            const blockName = cell ? cell.dataset.block : '';
+
+            const currentSetImages = getSetImages(sets[current]);
+            if (!currentSetImages.length) return;
+
+            let targetIndex = currentSetImages.findIndex((item) => item.block === blockName);
+            if (targetIndex === -1) {
+                const cleanCurrentSrc = normalizeImageSrc(img.src);
+                targetIndex = currentSetImages.findIndex((item) => item.src === cleanCurrentSrc);
+            }
+            if (targetIndex === -1) {
+                targetIndex = 0;
+            }
+
+            stopAutoplay();
+            const lb = getOrCreateLightbox();
+            lb.open(currentSetImages, targetIndex, lightboxBg);
+        });
+    }
 
     // ── Bagliore mouse ───────────────────────────────────────────────────
     if (dom.glow && showMouseGlow) {

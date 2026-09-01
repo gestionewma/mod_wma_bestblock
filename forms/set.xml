@@ -562,9 +562,6 @@
                 label="MOD_WMA_BESTBLOCK_LINK_URL"
                 description="MOD_WMA_BESTBLOCK_LINK_URL_DESC"
                 hint="https://..." />
-            <field name="b9_paragraph" type="text"
-                label="MOD_WMA_BESTBLOCK_BADGE"
-                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
         </fieldset>
 
         <!-- ═══════════════════════════════════════════════════════════════
@@ -575,9 +572,6 @@
                 label="MOD_WMA_BESTBLOCK_BTN_LABEL"
                 description="MOD_WMA_BESTBLOCK_BTN_PREV_DESC"
                 default="← Precedente" />
-            <field name="b10_paragraph" type="text"
-                label="MOD_WMA_BESTBLOCK_BADGE"
-                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
         </fieldset>
 
         <!-- ═══════════════════════════════════════════════════════════════
@@ -588,9 +582,6 @@
                 label="MOD_WMA_BESTBLOCK_BTN_LABEL"
                 description="MOD_WMA_BESTBLOCK_BTN_NEXT_DESC"
                 default="Successivo →" />
-            <field name="b11_paragraph" type="text"
-                label="MOD_WMA_BESTBLOCK_BADGE"
-                description="MOD_WMA_BESTBLOCK_BADGE_DESC" />
         </fieldset>
 
     </fields>

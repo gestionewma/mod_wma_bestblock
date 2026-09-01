@@ -8,8 +8,8 @@
  * @copyright   (C) 2026 WMA Web Maker Agency. All rights reserved.
  * @license     GNU General Public License version 2 or later;
  * @link        https://www.wma.ovh
- * @version     1.0.25
- * @date        27/08/2026
+ * @version     1.0.26
+ * @date        01/09/2026
  * @file        layouts/subform/wma_bestblock.php
  */
 
@@ -261,19 +261,14 @@ function renderSetLayout(object $form): string
 
     echo '<div class="bb-buttons-row">';
     foreach ($btnBlocks as $fieldset => $label) {
-        $fields = $buildFieldMap($form, $fieldset);
         $headerText = Text::_($label);
 
-        echo '<div class="bb-block-section" data-badge-field="' . htmlspecialchars($fieldset . '_paragraph', ENT_QUOTES, 'UTF-8') . '">';
+        echo '<div class="bb-block-section">';
         echo '<div class="bb-block-header">' . $headerText . '</div>';
         echo '<div class="bb-block-fields">';
         foreach ($form->getFieldset($fieldset) as $field) {
-            if ((string) $field->fieldname === $fieldset . '_paragraph') {
-                continue;
-            }
             echo $field->renderField(['class' => 'control-group']);
         }
-        echo $renderField($fields, $fieldset . '_paragraph', $headerText);
         echo '</div></div>';
     }
     echo '</div>';
@@ -297,10 +292,10 @@ function renderSetLayout(object $form): string
                 <span><?php echo Text::_('MOD_WMA_BESTBLOCK_SET') . ' ' . ($groupIndex + 1); ?></span>
                 <div class="d-flex gap-2 align-items-center">
                     <button type="button"
-                            class="btn btn-sm btn-secondary subform-collapse-row"
+                            class="btn btn-sm btn-secondary subform-collapse-row collapsed"
                             data-bs-toggle="collapse"
                             data-bs-target="#<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-collapse-<?php echo $groupIndex; ?>"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-collapse-<?php echo $groupIndex; ?>"
                             title="<?php echo Text::_('JTOGGLE'); ?>">
                         <span class="icon-chevron-down" aria-hidden="true"></span>
@@ -320,7 +315,7 @@ function renderSetLayout(object $form): string
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="bb-set-body collapse show" id="<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-collapse-<?php echo $groupIndex; ?>">
+            <div class="bb-set-body collapse" id="<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-collapse-<?php echo $groupIndex; ?>">
                 <?php echo renderSetLayout($form); ?>
             </div>
         </div>
@@ -382,97 +377,192 @@ function renderSetLayout(object $form): string
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
-        var wrapperId   = '<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-wrapper';
-        var wrapper     = document.getElementById(wrapperId);
+        var FIELD_ID  = '<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>';
+        var GROUP     = '<?php echo htmlspecialchars($control, ENT_QUOTES, 'UTF-8'); ?>';   // es. "sets"
+        var TMPL_TOKEN = GROUP + 'X';                                                        // segnaposto Joomla nel template (es. "setsX")
+        var SET_LABEL = '<?php echo htmlspecialchars(Text::_('MOD_WMA_BESTBLOCK_SET'), ENT_QUOTES, 'UTF-8'); ?>';
+
+        var wrapper = document.getElementById(FIELD_ID + '-wrapper');
         if (!wrapper) return;
 
-        var rowsContainer = document.getElementById('<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-rows');
-        var tmplEl        = document.getElementById('<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-tmpl');
-        var btnAdd        = document.getElementById('<?php echo htmlspecialchars($fieldId, ENT_QUOTES, 'UTF-8'); ?>-add');
+        var rowsContainer = document.getElementById(FIELD_ID + '-rows');
+        var tmplEl        = document.getElementById(FIELD_ID + '-tmpl');
+        var btnAdd        = document.getElementById(FIELD_ID + '-add');
         var form          = wrapper.closest('form');
 
         var rowCount = rowsContainer.querySelectorAll('.subform-repeatable-group').length;
+
+        // Attributi che contengono identificatori (mai dati inseriti dall'utente)
+        var ID_ATTRS = ['name', 'id', 'for', 'aria-describedby', 'aria-controls', 'aria-labelledby', 'data-bs-target', 'list', 'headers', 'form'];
 
         function escapeRegExp(value) {
             return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
-        function replaceIndexTokens(value, fromIndex, toIndex) {
-            var output = String(value || '');
-            var from = escapeRegExp(fromIndex);
-            var to = String(toIndex);
-
-            output = output
-                .replace(new RegExp('\\[' + from + '\\]', 'g'), '[' + to + ']')
-                .replace(new RegExp('_' + from + '_', 'g'), '_' + to + '_')
-                .replace(new RegExp('-collapse-' + from + '(?=$|[^0-9])', 'g'), '-collapse-' + to)
-                .replace(/__INDEX__/g, to)
-                .replace(/__NUM__/g, String(Number(to) + 1));
-
-            return output;
-        }
-
-        function getFieldKey(name) {
-            var match = String(name || '').match(/\[([^\[\]]+)\]$/);
-            return match ? match[1] : '';
-        }
-
-        function copyRowValues(sourceRow, targetRow) {
-            sourceRow.querySelectorAll('input, select, textarea').forEach(function (sourceEl) {
-                var key = getFieldKey(sourceEl.name);
-                if (!key) return;
-
-                var targetEl = targetRow.querySelector('[name$="[' + key + ']"]');
-                if (!targetEl) return;
-
-                if (sourceEl.type === 'checkbox' || sourceEl.type === 'radio') {
-                    targetEl.checked = sourceEl.checked;
-                    return;
+        // Sostituisce un token letterale in tutti gli attributi (e opzionalmente nel testo) del sottoalbero.
+        function replaceToken(rootEl, from, to, includeText) {
+            var els = [rootEl].concat(Array.prototype.slice.call(rootEl.querySelectorAll('*')));
+            els.forEach(function (el) {
+                for (var i = 0; i < el.attributes.length; i++) {
+                    var attr = el.attributes[i];
+                    if (attr.value.indexOf(from) !== -1) {
+                        el.setAttribute(attr.name, attr.value.split(from).join(to));
+                    }
                 }
+            });
 
-                if (sourceEl.tagName === 'SELECT') {
-                    targetEl.value = sourceEl.value;
-                    return;
+            if (!includeText) return;
+
+            var walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
+            var node;
+            while ((node = walker.nextNode())) {
+                if (node.nodeValue.indexOf(from) !== -1) {
+                    node.nodeValue = node.nodeValue.split(from).join(to);
                 }
-
-                targetEl.value = sourceEl.value;
-            });
-        }
-
-        function applyRowIndex(row, index) {
-            var currentIndex = row.dataset.index !== undefined ? String(row.dataset.index) : '';
-
-            row.dataset.index = String(index);
-            row.dataset.group = '<?php echo $control; ?>[' + index + ']';
-
-            row.querySelectorAll('[name]').forEach(function (el) {
-                el.name = replaceIndexTokens(el.name, currentIndex, index);
-            });
-
-            row.querySelectorAll('[id]').forEach(function (el) {
-                el.id = replaceIndexTokens(el.id, currentIndex, index);
-            });
-
-            row.querySelectorAll('[for]').forEach(function (el) {
-                el.setAttribute('for', replaceIndexTokens(el.getAttribute('for'), currentIndex, index));
-            });
-
-            row.querySelectorAll('[data-bs-target]').forEach(function (el) {
-                el.setAttribute('data-bs-target', replaceIndexTokens(el.getAttribute('data-bs-target'), currentIndex, index));
-            });
-
-            row.querySelectorAll('[aria-controls]').forEach(function (el) {
-                el.setAttribute('aria-controls', replaceIndexTokens(el.getAttribute('aria-controls'), currentIndex, index));
-            });
-
-            var collapseBody = row.querySelector('.bb-set-body');
-            if (collapseBody && collapseBody.id) {
-                collapseBody.id = replaceIndexTokens(collapseBody.id, currentIndex, index);
             }
+        }
+
+        // Crea una nuova riga dal <template>, con nomi/ID già indicizzati correttamente.
+        function buildRowFromTemplate(index) {
+            var frag    = tmplEl.content.cloneNode(true);
+            var groupEl = frag.querySelector('.subform-repeatable-group');
+
+            // Token del markup custom del layout
+            replaceToken(groupEl, '__INDEX__', String(index), true);
+            replaceToken(groupEl, '__NUM__', String(index + 1), true);
+
+            // Segnaposto dei nomi campo generati da Joomla: setsX -> sets{index}
+            replaceToken(groupEl, TMPL_TOKEN, GROUP + index, false);
+
+            groupEl.setAttribute('data-index', String(index));
+            groupEl.setAttribute('data-group', GROUP + '[' + index + ']');
+
+            return groupEl;
+        }
+
+        // Copia i valori da una riga sorgente a una riga target (per la duplicazione).
+        function copyRowValues(sourceRow, targetRow) {
+            var srcTok = GROUP + String(sourceRow.dataset.index);
+            var dstTok = GROUP + String(targetRow.dataset.index);
+
+            // 1. Tutti i campi con name (input/select/textarea): immagini, alt, titoli,
+            //    dimensione font, tag, link, paragrafo/badge.
+            sourceRow.querySelectorAll('input, select, textarea').forEach(function (srcEl) {
+                if (!srcEl.name || srcEl.type === 'file') return;
+
+                var targetName = srcEl.name.split(srcTok).join(dstTok);
+                var dstEl = targetRow.querySelector('[name="' + targetName + '"]');
+                if (!dstEl) return;
+
+                if (srcEl.type === 'checkbox' || srcEl.type === 'radio') {
+                    dstEl.checked = srcEl.checked;
+                } else {
+                    dstEl.value = srcEl.value;
+                }
+            });
+
+            // 2. Campi di sola visualizzazione senza name (es. titolo articolo selezionato).
+            sourceRow.querySelectorAll('input[id]:not([name])').forEach(function (srcEl) {
+                var targetId = srcEl.id.split(srcTok).join(dstTok);
+                if (targetId === srcEl.id) return;
+                var dstEl = targetRow.querySelector('[id="' + targetId + '"]');
+                if (dstEl) dstEl.value = srcEl.value;
+            });
+
+            // 3. Web component media: allinea l'attributo value (l'anteprima viene ricostruita
+            //    da refreshMediaPreviews dopo l'inserimento nel DOM).
+            var mediaValues = {};
+            sourceRow.querySelectorAll('joomla-field-media').forEach(function (srcMedia) {
+                var input = srcMedia.querySelector('input[name]');
+                if (input) {
+                    mediaValues[input.name.split(srcTok).join(dstTok)] = (input.value || '').trim();
+                }
+            });
+            targetRow.querySelectorAll('joomla-field-media').forEach(function (dstMedia) {
+                var input = dstMedia.querySelector('input[name]');
+                if (!input || mediaValues[input.name] === undefined) return;
+                input.value = mediaValues[input.name];
+                dstMedia.setAttribute('value', mediaValues[input.name]);
+            });
+        }
+
+        // Ricostruisce l'anteprima visiva dei campi media di una riga leggendo il valore dell'input.
+        function refreshMediaPreviews(row) {
+            var rootUrl = (window.Joomla && Joomla.getOptions && Joomla.getOptions('system.paths') && Joomla.getOptions('system.paths').rootFull)
+                ? Joomla.getOptions('system.paths').rootFull
+                : (window.location.origin + '/');
+            rootUrl = rootUrl.replace(/\/+$/, '');
+
+            row.querySelectorAll('joomla-field-media').forEach(function (media) {
+                var input = media.querySelector('input[name$="[imagefile]"]');
+                var val   = input ? (input.value || '').trim() : '';
+                var preview = media.querySelector('.field-media-preview');
+                if (!preview) return;
+
+                // Ricostruzione via API DOM: 'url' non viene mai interpretato come HTML.
+                preview.textContent = '';
+
+                if (!val) {
+                    return;
+                }
+
+                var clean = normalizeMediaValue(val);
+                var url = /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(clean)
+                    ? clean
+                    : (rootUrl + '/' + clean.replace(/^\/+/, ''));
+
+                var img = document.createElement('img');
+                img.src = url;
+                img.alt = '';
+                img.style.maxHeight = '100px';
+                img.style.maxWidth = '100px';
+                img.style.objectFit = 'cover';
+
+                preview.appendChild(img);
+                preview.style.display = '';
+            });
+        }
+
+        // Riallinea nomi/ID/collapse di una riga all'indice desiderato (dopo aggiunta, rimozione, riordino).
+        function applyRowIndex(row, newIndex) {
+            var oldIndex = (row.dataset.index !== undefined && row.dataset.index !== '')
+                ? String(row.dataset.index)
+                : String(newIndex);
+            newIndex = String(newIndex);
+
+            if (oldIndex !== newIndex) {
+                var oldTok = GROUP + oldIndex;
+                var newTok = GROUP + newIndex;
+
+                var els = [row].concat(Array.prototype.slice.call(row.querySelectorAll('*')));
+                els.forEach(function (el) {
+                    ID_ATTRS.forEach(function (name) {
+                        if (!el.hasAttribute(name)) return;
+                        var v = el.getAttribute(name);
+                        if (v.indexOf(oldTok) !== -1) {
+                            el.setAttribute(name, v.split(oldTok).join(newTok));
+                        }
+                    });
+                });
+
+                // ID / target del collapse: "{FIELD_ID}-collapse-{index}"
+                var reCollapse = new RegExp('-collapse-' + escapeRegExp(oldIndex) + '(?=$|[^0-9])', 'g');
+                ['id', 'data-bs-target', 'aria-controls'].forEach(function (name) {
+                    row.querySelectorAll('[' + name + ']').forEach(function (el) {
+                        var v = el.getAttribute(name);
+                        if (v.indexOf('-collapse-') !== -1) {
+                            el.setAttribute(name, v.replace(reCollapse, '-collapse-' + newIndex));
+                        }
+                    });
+                });
+            }
+
+            row.dataset.index = newIndex;
+            row.dataset.group = GROUP + '[' + newIndex + ']';
 
             var header = row.querySelector('.bb-set-header span');
             if (header) {
-                header.textContent = '<?php echo Text::_('MOD_WMA_BESTBLOCK_SET'); ?> ' + (index + 1);
+                header.textContent = SET_LABEL + ' ' + (parseInt(newIndex, 10) + 1);
             }
         }
 
@@ -579,38 +669,12 @@ function renderSetLayout(object $form): string
 
         if (btnAdd && tmplEl) {
             btnAdd.addEventListener('click', function () {
-                var index = rowCount;
-                var num   = rowCount + 1;
-
-                var clone = tmplEl.content.cloneNode(true);
-                var html  = clone.querySelector('.subform-repeatable-group').outerHTML;
-                html = html.replace(/__INDEX__/g, String(index));
-                html = html.replace(/__NUM__/g, String(num));
-
-                var tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                var groupEl = tempDiv.querySelector('.subform-repeatable-group');
-
-                groupEl.querySelectorAll('[name]').forEach(function (el) {
-                    el.name = el.name.replace(/\[__INDEX__\]/g, '[' + index + ']');
-                });
-                groupEl.querySelectorAll('[id]').forEach(function (el) {
-                    el.id = el.id.replace(/__INDEX__/g, String(index));
-                });
-                groupEl.querySelectorAll('[for]').forEach(function (el) {
-                    el.setAttribute('for', el.getAttribute('for').replace(/__INDEX__/g, String(index)));
-                });
-                groupEl.querySelectorAll('[data-bs-target]').forEach(function (el) {
-                    el.setAttribute('data-bs-target', el.getAttribute('data-bs-target').replace(/__INDEX__/g, String(index)));
-                });
-                groupEl.querySelectorAll('[aria-controls]').forEach(function (el) {
-                    el.setAttribute('aria-controls', el.getAttribute('aria-controls').replace(/__INDEX__/g, String(index)));
-                });
-
-                rowsContainer.insertAdjacentHTML('beforeend', groupEl.outerHTML);
-                rowCount++;
+                var newRow = buildRowFromTemplate(rowCount);
+                rowsContainer.appendChild(newRow);
+                reindexRows();
                 normalizeAllMediaFields();
                 syncBadgeHeaders();
+                newRow.dispatchEvent(new CustomEvent('joomla:updated', { bubbles: true, cancelable: true }));
             });
         }
 
@@ -618,41 +682,18 @@ function renderSetLayout(object $form): string
             var copyBtn = e.target.closest('.subform-copy-row');
             if (copyBtn) {
                 var sourceGroup = copyBtn.closest('.subform-repeatable-group');
-                if (!sourceGroup) return;
+                if (!sourceGroup || !tmplEl) return;
 
-                var index = rowCount;
-                var num   = rowCount + 1;
-
-                var clone = tmplEl.content.cloneNode(true);
-                var html  = clone.querySelector('.subform-repeatable-group').outerHTML;
-                html = html.replace(/__INDEX__/g, String(index));
-                html = html.replace(/__NUM__/g, String(num));
-
-                var tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                var groupEl = tempDiv.querySelector('.subform-repeatable-group');
-
-                groupEl.querySelectorAll('[name]').forEach(function (el) {
-                    el.name = el.name.replace(/\[__INDEX__\]/g, '[' + index + ']');
-                });
-                groupEl.querySelectorAll('[id]').forEach(function (el) {
-                    el.id = el.id.replace(/__INDEX__/g, String(index));
-                });
-                groupEl.querySelectorAll('[for]').forEach(function (el) {
-                    el.setAttribute('for', el.getAttribute('for').replace(/__INDEX__/g, String(index)));
-                });
-                groupEl.querySelectorAll('[data-bs-target]').forEach(function (el) {
-                    el.setAttribute('data-bs-target', el.getAttribute('data-bs-target').replace(/__INDEX__/g, String(index)));
-                });
-                groupEl.querySelectorAll('[aria-controls]').forEach(function (el) {
-                    el.setAttribute('aria-controls', el.getAttribute('aria-controls').replace(/__INDEX__/g, String(index)));
-                });
-
-                rowsContainer.appendChild(groupEl);
-                copyRowValues(sourceGroup, rowsContainer.lastElementChild);
+                var newRow = buildRowFromTemplate(rowCount);
+                // Copia i valori sul nodo ancora staccato: i web component si inizializzano
+                // con il valore corretto all'inserimento nel DOM.
+                copyRowValues(sourceGroup, newRow);
+                rowsContainer.appendChild(newRow);
                 reindexRows();
                 normalizeAllMediaFields();
+                refreshMediaPreviews(newRow);
                 syncBadgeHeaders();
+                newRow.dispatchEvent(new CustomEvent('joomla:updated', { bubbles: true, cancelable: true }));
                 return;
             }
 

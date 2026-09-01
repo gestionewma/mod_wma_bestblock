@@ -8,8 +8,8 @@
  * @copyright   (C) 2026 WMA Web Maker Agency. All rights reserved.
  * @license     GNU General Public License version 2 or later;
  * @link        https://www.wma.ovh
- * @version     1.0.25
- * @date        27/08/2026
+ * @version     1.0.26
+ * @date        01/09/2026
  * @file        src/Helper/WmaBestblockHelper.php
  */
 
@@ -279,7 +279,8 @@ class WmaBestblockHelper
                 }
             }
 
-            if (str_starts_with($freeUrl, '/')) {
+            // Path relativo interno: consentito, ma non gli URL protocol-relative "//host".
+            if (str_starts_with($freeUrl, '/') && !str_starts_with($freeUrl, '//')) {
                 return $freeUrl;
             }
         }
@@ -328,6 +329,9 @@ class WmaBestblockHelper
         if ($size === '') {
             return '';
         }
+
+        // Sostituisce la virgola col punto (separatore decimale locale browser italiano)
+        $size = str_replace(',', '.', $size);
 
         if (!is_numeric($size)) {
             return '';
