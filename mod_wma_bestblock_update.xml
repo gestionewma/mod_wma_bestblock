@@ -15,7 +15,7 @@
         </downloads>
 
 
-        <!-- TODO v1.0.31: ricalcolare lo SHA256 sullo ZIP generato da GitHub Actions e reinserire <checksum type="sha256">...</checksum> -->
+        <checksum type="sha256">7aa5bc4ea6930b35519776b4e4bb4e29386ff80de167a2c90089e04d956abd16</checksum>
         <targetplatform name="joomla" version="6.*" />
     </update>
 </updates>
